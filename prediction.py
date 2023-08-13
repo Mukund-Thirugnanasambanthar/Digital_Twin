@@ -13,7 +13,7 @@ def predict(data,case):
         name = 'Case4.json'
     elif case == 'Case_5':
         name = 'Case5.json'
-    load_model=tf.keras.saving.load_model("C:/Users/Mukund/Documents/Digital_Twin/"+name)
+    load_model=tf.keras.saving.load_model(name)
     pred=load_model.predict(data)
     pred=np.array(pred)
     pred=np.reshape(pred,(30255,1))
