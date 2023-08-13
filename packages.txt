@@ -1,3 +1,4 @@
 libgl1
 libfontconfig1 libxrender1
 xvfb
+libspeex1 libva-x11-2 libvpx5 libcroco3 libdrm2 libgraphite2-3 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libxcb-render0 libatlas3-base libfontconfig1 libx264-155 libva2 libopenmpt0 libtheora0 libpangoft2-1.0-0 libcairo2 libgsm1 libmp3lame0 libdatrie1 libpango-1.0-0 libswresample3 libxvidcore4 libgme0 libssh-gcrypt-4 libshine3 libxfixes3 libvorbis0a libsoxr0 libx265-165 libva-drm2 libvorbisenc2 libharfbuzz0b libzvbi0 libswscale5 libxrender1 libopenjp2-7 libtwolame0 libthai0 libtiff5 libgfortran5 libchromaprint1 librsvg2-2 libvorbisfile3 libavformat58 libcodec2-0.8.1 libwavpack1 libwebp6 libvdpau1 libxcb-shm0 libaom0 libavutil56 libjbig0 libogg0 libsnappy1v5 libwebpmux3 libbluray2 libpixman-1-0 libopus0 libavcodec58 libmpg123-0
