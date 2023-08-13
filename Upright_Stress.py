@@ -106,7 +106,7 @@ with Col2:
             accel=abs(acceleration[number])
             result=predict([accel],case)
             grid.cell_data["values"] = result
-            pyvista.start_xvfb()
+            pv.start_xvfb()
             plotter=pv.Plotter(window_size=[700,500])
             plotter.view_isometric()
             plotter.add_axes(line_width=5)
