@@ -132,6 +132,7 @@ with Col2:
             ax.axis('off')
             legend=fig.savefig('Colorbar.png')
             st.pyplot(fig)
+            st.caption('Stress value at the time stamp(MPa)')
     acceleration_life=acceleration[0:time]
     steering_life=steering[0:time]
     max_stress=[]
