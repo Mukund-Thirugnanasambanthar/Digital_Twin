@@ -90,7 +90,6 @@ with Col1:
     st.subheader("Acceleration:"+str(acceleration[number]))
     st.subheader('Steering:'+str(steering[number]))
     predictor_button=st.button("Predict Stress Distribution")
-grid=load_model()
 # # # #grid=pv.StructuredGrid(points)
 if acceleration[number] < 0 and steering[number] == 0:
     case="Case_1"
@@ -109,6 +108,7 @@ with Col2:
         with col1:
             accel=abs(acceleration[number])
             result=predict([accel],case)
+            grid=load_model()
             grid.cell_data["values"] = result
             plotter=pv.Plotter(window_size=[700,500])
             plotter.view_isometric()
