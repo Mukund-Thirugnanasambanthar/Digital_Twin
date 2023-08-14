@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import altair as alt
 from PIL import Image
-@st.cache
+@st.cache_data
 def load_model():
     fem_file=open('E13_FEMModel.fem','r')
     content=fem_file.read()
