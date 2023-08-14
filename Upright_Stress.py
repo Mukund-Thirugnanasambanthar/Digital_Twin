@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import altair as alt
 from PIL import Image
+@st.cache
 st.set_page_config(page_title="Vehicle Upright Health Monitor",layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
 image=Image.open('Logo.png')
