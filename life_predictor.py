@@ -2,7 +2,7 @@ import tensorflow as tf
 import keras
 import numpy as np
 
-def life(data,case):
+def life(*data,*case):
     max_stress=[]
     for i in range(len(data)):
         if case[i] == 'Case_1':
