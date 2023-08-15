@@ -54,8 +54,7 @@ def load_model():
     # # print(cells[0])
     # # print(np.shape(points))
     celltypes=np.full(Hexa_iter,CellType.HEXAHEDRON,dtype=np.float32)
-    voxel=pv.UnstructuredGrid(cells,celltypes,points)
-    return voxel
+    return cells,celltypes,points
 st.set_page_config(page_title="Vehicle Upright Health Monitor",layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
 image=Image.open('Logo.png')
@@ -91,7 +90,6 @@ with Col1:
     st.subheader("Acceleration:"+str(acceleration[number]))
     st.subheader('Steering:'+str(steering[number]))
     predictor_button=st.button("Predict Stress Distribution")
-grid=load_model()
 # # # #grid=pv.StructuredGrid(points)
 if acceleration[number] < 0 and steering[number] == 0:
     case="Case_1"
@@ -110,6 +108,8 @@ with Col2:
         with col1:
             accel=abs(acceleration[number])
             result=predict([accel],case)
+            cells,celltypes,points=load_model()
+            grid=pv.UnstructuredGrid(cells,celltypes,points)
             grid.cell_data["values"] = result
             plotter=pv.Plotter(window_size=[700,500])
             plotter.view_isometric()
