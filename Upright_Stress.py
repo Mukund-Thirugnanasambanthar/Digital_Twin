@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import altair as alt
 from PIL import Image
-from life_predictor import life
 @st.cache_data
 def model_upload():
     fem_file=open('E13_FEMModel.fem','r')
@@ -111,6 +110,7 @@ with Col2:
             cells,celltypes,points=model_upload()
             grid=pv.UnstructuredGrid(cells,celltypes,points)
             grid.cell_data["values"] = result
+            pv.start_xvfb()
             plotter=pv.Plotter(window_size=[700,500])
             plotter.view_isometric()
             plotter.add_axes(line_width=5)
@@ -138,7 +138,7 @@ with Col2:
             st.pyplot(fig)
     acceleration_life=acceleration[0:time]
     steering_life=steering[0:time]
-    case_predictor=[]
+    max_stress=[]
     for i in range(len(acceleration_life)):
         if acceleration_life[i] < 0 and steering_life[i] == 0:
             case_life="Case_1"
@@ -150,10 +150,9 @@ with Col2:
             case_life="Case_5"
         elif steering_life[i] != 0:
             case_life="Case_3"
-        case_predictor.append(case_life)
-    max_stress=life(acceleration_life,case_predictor)
-    st.write(max_stress)
-    
+        stress=predict([acceleration_life[i]],case_life)
+        maxi=max(stress)
+        max_stress.append(maxi)
     stresslevels_rice_Endurance_ksi = [element * 0.145 for element in max_stress]
     # Given Constants
     
