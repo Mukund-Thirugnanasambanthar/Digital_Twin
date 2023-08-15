@@ -16,7 +16,7 @@ def life(data,case):
         elif case[i] == 'Case_5':
             name = 'Case5.json'
         load_model=tf.keras.saving.load_model(name)
-        pred=load_model.predict(accel[i])
+        pred=load_model.predict(data[i])
         pred=np.array(pred)
         pred=np.reshape(pred,(30255,1))
         max_stress.append(max(pred))
