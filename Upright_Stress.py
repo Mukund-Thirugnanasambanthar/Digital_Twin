@@ -11,7 +11,7 @@ import altair as alt
 from PIL import Image
 from life_predictor import life
 @st.cache_data
-def load_model():
+def model_upload():
     fem_file=open('E13_FEMModel.fem','r')
     content=fem_file.read()
     splitted_line=content.splitlines()
@@ -108,7 +108,7 @@ with Col2:
         with col1:
             accel=abs(acceleration[number])
             result=predict([accel],case)
-            cells,celltypes,points=load_model()
+            cells,celltypes,points=model_upload()
             grid=pv.UnstructuredGrid(cells,celltypes,points)
             grid.cell_data["values"] = result
             plotter=pv.Plotter(window_size=[700,500])
