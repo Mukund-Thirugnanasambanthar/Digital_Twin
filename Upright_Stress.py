@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import altair as alt
 from PIL import Image
+from life_predictor import life
 @st.cache_data
 def load_model():
     fem_file=open('E13_FEMModel.fem','r')
@@ -53,7 +54,8 @@ def load_model():
     # # print(cells[0])
     # # print(np.shape(points))
     celltypes=np.full(Hexa_iter,CellType.HEXAHEDRON,dtype=np.float32)
-    return cells,celltypes,points
+    voxel=pv.UnstructuredGrid(cells,celltypes,points)
+    return voxel
 st.set_page_config(page_title="Vehicle Upright Health Monitor",layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
 image=Image.open('Logo.png')
@@ -89,6 +91,7 @@ with Col1:
     st.subheader("Acceleration:"+str(acceleration[number]))
     st.subheader('Steering:'+str(steering[number]))
     predictor_button=st.button("Predict Stress Distribution")
+grid=load_model()
 # # # #grid=pv.StructuredGrid(points)
 if acceleration[number] < 0 and steering[number] == 0:
     case="Case_1"
@@ -107,10 +110,7 @@ with Col2:
         with col1:
             accel=abs(acceleration[number])
             result=predict([accel],case)
-            cells,celltypes,points=load_model()
-            grid=pv.UnstructuredGrid(cells,celltypes,points)
             grid.cell_data["values"] = result
-            pv.start_xvfb()
             plotter=pv.Plotter(window_size=[700,500])
             plotter.view_isometric()
             plotter.add_axes(line_width=5)
@@ -138,7 +138,7 @@ with Col2:
             st.pyplot(fig)
     acceleration_life=acceleration[0:time]
     steering_life=steering[0:time]
-    max_stress=[]
+    case_predictor=[]
     for i in range(len(acceleration_life)):
         if acceleration_life[i] < 0 and steering_life[i] == 0:
             case_life="Case_1"
@@ -150,9 +150,8 @@ with Col2:
             case_life="Case_5"
         elif steering_life[i] != 0:
             case_life="Case_3"
-        stress=predict([acceleration_life[i]],case_life)
-        maxi=max(stress)
-        max_stress.append(maxi)
+        case_predictor.append(case_life)
+    max_stress=life(acceleration_life,case_predictor)
     
     stresslevels_rice_Endurance_ksi = [element * 0.145 for element in max_stress]
     # Given Constants
