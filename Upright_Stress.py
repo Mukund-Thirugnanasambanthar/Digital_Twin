@@ -151,7 +151,7 @@ with Col2:
         elif steering_life[i] != 0:
             case_life="Case_3"
         case_predictor.append(case_life)
-    max_stress=life(acceleration_life,case_predictor)
+    max_stress=life(*acceleration_life,*case_predictor)
     
     stresslevels_rice_Endurance_ksi = [element * 0.145 for element in max_stress]
     # Given Constants
