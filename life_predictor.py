@@ -15,7 +15,7 @@ def life(data,case):
             name = 'Case4.json'
         elif case[i] == 'Case_5':
             name = 'Case5.json'
-        load_model=tf.keras.saving.load_model('C:/Users/Mukund/Documents/Digital_Twin/Voxel/'+str(name))
+        load_model=tf.keras.saving.load_model(str(name))
         pred=load_model.predict([abs(data[i])])
         pred=np.array(pred)
         pred=np.reshape(pred,(30255,1))
