@@ -6,8 +6,9 @@
 
 The combination of machine learning, FEA and Racedynamics all rolled into one. The model leverages the usefulness of data from endurance runs and creates a visualisation of the stress distribution and serves to estimate the life/damage to the vehicle upright. A machine learning model learns the distribution of the stress as a function of the steering and the acceleration. The load cases are divided into acceleration, braking, cornering with acceleration, cornering with braking and cornering. A simple ANN based neural network generates a numpy array of stress that can be displayed as scalar values on a voxel 3D mesh. Pyvista library offers a powerful 3D visualising tool to visualise this data. This allows us to leverage the power of visualisation through data rather than building complex neural networks that needs to work through 3D meshes. 
 To perform a demo of this app you can scan the following QR code.
-(Caution: Run for a limited time less than 30s preferably to test process,fork the repo and use the power of your processors to utilise the maximum potential)
-(Why? The demo is deployed on the streamlit community sharing which has limited memory)
+
+###(Caution: Run for a limited time less than 30s preferably to test process,fork the repo and use the power of your processors to utilise the maximum potential)
+###(Why? The demo is deployed on the streamlit community sharing which has limited memory)
 
 ![image](https://github.com/Mukund-Thirugnanasambanthar/Digital_Twin/assets/116257453/930cd0ee-7bda-44e6-8c70-4dbb6304d8f7)
 
