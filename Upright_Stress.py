@@ -9,54 +9,10 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import altair as alt
 from PIL import Image
-@st.cache_data
-def model_upload():
-    fem_file=open('E13_FEMModel.fem','r')
-    content=fem_file.read()
-    splitted_line=content.splitlines()
-    Grid=[]
-    iter=0
-    for i in splitted_line:
-        if i.find('GRID')==0:
-            iter=iter+1
-            Grid.append(float(i[24:32]))
-            Grid.append(float(i[32:40]))
-            Grid.append(float(i[40:48]))
-        else:
-            continue
-    Grid=np.array(Grid)
-    points=np.reshape(Grid,(iter,3))
-    Hexa_line=splitted_line[0:133563]
-    Hexa_iter=0
-    Hexa=[]
-    for j in Hexa_line:
-        if (j.find('CHEXA')==0):
-            #Hexa.append(int(j[20:25]))
-            Hexa.append(int(j[27:33])-1)
-            Hexa.append(int(j[35:41])-1)
-            Hexa.append(int(j[43:49])-1)
-            Hexa.append(int(j[51:57])-1)
-            Hexa.append(int(j[59:65])-1)
-            Hexa.append(int(j[67:73])-1)
-            Hexa_iter=Hexa_iter+1
-        elif (j.find('+')==0):
-            Hexa.append(int(j[11:17])-1)
-            Hexa.append(int(j[19:25])-1)
-    Hexa=np.array(Hexa)
-    Voxel=np.reshape(Hexa,(Hexa_iter,8))
-    # grid = pv.UnstructuredGrid(Voxel_,[CellType.HEXAHEDRON], data)
-    cell=[]
-    for k in range(0,Hexa_iter):
-        cell_data=np.append(8,Voxel[k])
-        cell.append(cell_data)
-    cells=np.array([cell])
-    # # print(cells[0])
-    # # print(np.shape(points))
-    celltypes=np.full(Hexa_iter,CellType.HEXAHEDRON,dtype=np.float32)
-    return cells,celltypes,points
+from life_predictor import life
 st.set_page_config(page_title="Vehicle Upright Health Monitor",layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
-image=Image.open('Logo.png')
+image=Image.open('C:/Users/Mukund/Documents/Digital_Twin/Voxel/Logo.png')
 image.resize([700,87])
 H_col1,H_col2,H_col3=st.columns(3)
 with H_col1:
@@ -89,6 +45,49 @@ with Col1:
     st.subheader("Acceleration:"+str(acceleration[number]))
     st.subheader('Steering:'+str(steering[number]))
     predictor_button=st.button("Predict Stress Distribution")
+fem_file=open('C:/Users/Mukund/Documents/Digital_Twin/Voxel/E13_FEMModel.fem','r')
+content=fem_file.read()
+splitted_line=content.splitlines()
+Grid=[]
+iter=0
+for i in splitted_line:
+    if i.find('GRID')==0:
+        iter=iter+1
+        Grid.append(float(i[24:32]))
+        Grid.append(float(i[32:40]))
+        Grid.append(float(i[40:48]))
+    else:
+        continue
+Grid=np.array(Grid)
+points=np.reshape(Grid,(iter,3))
+Hexa_line=splitted_line[0:133563]
+Hexa_iter=0
+Hexa=[]
+for j in Hexa_line:
+    if (j.find('CHEXA')==0):
+        #Hexa.append(int(j[20:25]))
+        Hexa.append(int(j[27:33])-1)
+        Hexa.append(int(j[35:41])-1)
+        Hexa.append(int(j[43:49])-1)
+        Hexa.append(int(j[51:57])-1)
+        Hexa.append(int(j[59:65])-1)
+        Hexa.append(int(j[67:73])-1)
+        Hexa_iter=Hexa_iter+1
+    elif (j.find('+')==0):
+        Hexa.append(int(j[11:17])-1)
+        Hexa.append(int(j[19:25])-1)
+Hexa=np.array(Hexa)
+Voxel=np.reshape(Hexa,(Hexa_iter,8))
+# grid = pv.UnstructuredGrid(Voxel_,[CellType.HEXAHEDRON], data)
+cell=[]
+for k in range(0,Hexa_iter):
+    cell_data=np.append(8,Voxel[k])
+    cell.append(cell_data)
+cells=np.array([cell])
+# # print(cells[0])
+# # print(np.shape(points))
+celltypes=np.full(Hexa_iter,CellType.HEXAHEDRON,dtype=np.float32)
+grid=pv.UnstructuredGrid(cells,celltypes,points)
 # # # #grid=pv.StructuredGrid(points)
 if acceleration[number] < 0 and steering[number] == 0:
     case="Case_1"
@@ -106,11 +105,9 @@ with Col2:
         col1,col2=st.columns([5,1])
         with col1:
             accel=abs(acceleration[number])
+            st.write(case)
             result=predict([accel],case)
-            cells,celltypes,points=model_upload()
-            grid=pv.UnstructuredGrid(cells,celltypes,points)
             grid.cell_data["values"] = result
-            pv.start_xvfb()
             plotter=pv.Plotter(window_size=[700,500])
             plotter.view_isometric()
             plotter.add_axes(line_width=5)
@@ -139,6 +136,7 @@ with Col2:
     acceleration_life=acceleration[0:time]
     steering_life=steering[0:time]
     max_stress=[]
+    cases=[]
     for i in range(len(acceleration_life)):
         if acceleration_life[i] < 0 and steering_life[i] == 0:
             case_life="Case_1"
@@ -150,9 +148,10 @@ with Col2:
             case_life="Case_5"
         elif steering_life[i] != 0:
             case_life="Case_3"
-        stress=predict([acceleration_life[i]],case_life)
-        maxi=max(stress)
-        max_stress.append(maxi)
+        cases.append(case_life)
+    st.write(acceleration_life[18],cases)
+    max_stress=life(acceleration_life,cases)
+    
     stresslevels_rice_Endurance_ksi = [element * 0.145 for element in max_stress]
     # Given Constants
     
