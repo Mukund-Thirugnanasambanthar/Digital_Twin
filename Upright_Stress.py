@@ -10,8 +10,8 @@ import matplotlib as mpl
 import altair as alt
 from PIL import Image
 from life_predictor import life
-@st.cache_data
-def computation(experimental_allow_widgets=True):
+@st.cache_data(experimental_allow_widgets=True)
+def computation():
     Col1,Col2=st.columns([0.25,0.75])
     with Col1:
         time=st.number_input('Time Frame to compute')
