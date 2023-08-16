@@ -176,6 +176,6 @@ with H_col3:
     if st.button("Clear All"):
     # Clear values from *all* all in-memory and on-disk data caches:
     # i.e. clear values from both square and cube
-    st.cache_data.clear()
+        st.cache_data.clear()
     st.caption('Incase of any questions or feedback contact Mukund Thirugnanasambanthar(@MuTh on Slack) mukund.thirugnanasambanthar@greenteam-stuttgart.de')
         
