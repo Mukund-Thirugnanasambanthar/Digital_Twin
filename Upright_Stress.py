@@ -10,9 +10,23 @@ import matplotlib as mpl
 import altair as alt
 from PIL import Image
 from life_predictor import life
-@st.cache_data(experimental_allow_widgets=True)
-def computation():
-    Col1,Col2=st.columns([0.25,0.75])
+st.set_page_config(page_title="Vehicle Upright Health Monitor",layout="wide")
+st.set_option('deprecation.showPyplotGlobalUse', False)
+image=Image.open('Logo.png')
+image.resize([700,87])
+H_col1,H_col2,H_col3=st.columns(3)
+with H_col1:
+    st.image(image)
+    st.subheader("Vehicle Upright Stress Plot")
+with H_col2:
+    upload_accel_file=st.file_uploader("Choose Acceleration file")
+    if upload_accel_file is not None:
+        acceleration=np.load(upload_accel_file)
+with H_col3:
+    upload_steering_file=st.file_uploader("Choose Steering file")
+    if upload_steering_file is not None:
+        steering=np.load(upload_steering_file)
+Col1,Col2=st.columns([0.25,0.75])
     with Col1:
         time=st.number_input('Time Frame to compute')
         time=int(time)
@@ -156,27 +170,5 @@ def computation():
         Damage_Endurance_ksi_list = [i / j for i, j in zip(N_Endurance_ksi, Nf_Endurance_ksi)]
         Damage_Endurance_ksi = sum(Damage_Endurance_ksi_list)
         st.subheader("Damage for uploaded Run:" +str(round(float(Damage_Endurance_ksi*(10**12)),3))+str('e-12'))
-st.set_page_config(page_title="Vehicle Upright Health Monitor",layout="wide")
-st.set_option('deprecation.showPyplotGlobalUse', False)
-image=Image.open('Logo.png')
-image.resize([700,87])
-H_col1,H_col2,H_col3=st.columns(3)
-with H_col1:
-    st.image(image)
-    st.subheader("Vehicle Upright Stress Plot")
-with H_col2:
-    upload_accel_file=st.file_uploader("Choose Acceleration file")
-    if upload_accel_file is not None:
-        acceleration=np.load(upload_accel_file)
-with H_col3:
-    upload_steering_file=st.file_uploader("Choose Steering file")
-    if upload_steering_file is not None:
-        steering=np.load(upload_steering_file)
-        computation()
-    
-    if st.button("Clear All"):
-    # Clear values from *all* all in-memory and on-disk data caches:
-    # i.e. clear values from both square and cube
-        st.cache_data.clear()
-    st.caption('Incase of any questions or feedback contact Mukund Thirugnanasambanthar(@MuTh on Slack) mukund.thirugnanasambanthar@greenteam-stuttgart.de')
+        st.caption('Incase of any questions or feedback contact Mukund Thirugnanasambanthar(@MuTh on Slack) mukund.thirugnanasambanthar@greenteam-stuttgart.de')
         
