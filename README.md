@@ -8,6 +8,7 @@ The combination of machine learning, FEA and Racedynamics all rolled into one. T
 To perform a demo of this app you can scan the following QR code.
 (Caution: Run for a limited time less than 30s preferably to test process,fork the repo and use the power of your processors to utilise the maximum potential)
 (Why? The demo is deployed on the streamlit community sharing which has limited memory)
+
 ![image](https://github.com/Mukund-Thirugnanasambanthar/Digital_Twin/assets/116257453/930cd0ee-7bda-44e6-8c70-4dbb6304d8f7)
 
 
