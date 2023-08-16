@@ -1,20 +1,16 @@
-# Digital_Twin_Streamlit
+# Vehicle Upright Health Monitor
 
 
 
-## Getting started
+## Machine learning model made easy
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+The combination of machine learning, FEA and Racedynamics all rolled into one. The model leverages the usefulness of data from endurance runs and creates a visualisation of the stress distribution and serves to estimate the life/damage to the vehicle upright. A machine learning model learns the distribution of the stress as a function of the steering and the acceleration. The load cases are divided into acceleration, braking, cornering with acceleration, cornering with braking and cornering. A simple ANN based neural network generates a numpy array of stress that can be displayed as scalar values on a voxel 3D mesh. Pyvista library offers a powerful 3D visualising tool to visualise this data. This allows us to leverage the power of visualisation through data rather than building complex neural networks that needs to work through 3D meshes. 
+To perform a demo of this app you can scan the following QR code.
+(Caution: Run for a limited time less than 30s preferably to test process,fork the repo and use the power of your processors to utilise the maximum potential)
+![image](https://github.com/Mukund-Thirugnanasambanthar/Digital_Twin/assets/116257453/930cd0ee-7bda-44e6-8c70-4dbb6304d8f7)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
 
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
+##Steps to run the app
 git remote add origin https://git.fs-stuttgart.de/mukund.thirugnanasambanthar/digital_twin_streamlit.git
 git branch -M main
 git push -uf origin main
