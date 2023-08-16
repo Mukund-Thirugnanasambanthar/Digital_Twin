@@ -10,6 +10,50 @@ import matplotlib as mpl
 import altair as alt
 from PIL import Image
 from life_predictor import life
+@st.cache_data
+def model_upload():
+    fem_file=open('E13_FEMModel.fem','r')
+    content=fem_file.read()
+    splitted_line=content.splitlines()
+    Grid=[]
+    iter=0
+    for i in splitted_line:
+        if i.find('GRID')==0:
+            iter=iter+1
+            Grid.append(float(i[24:32]))
+            Grid.append(float(i[32:40]))
+            Grid.append(float(i[40:48]))
+        else:
+            continue
+    Grid=np.array(Grid)
+    points=np.reshape(Grid,(iter,3))
+    Hexa_line=splitted_line[0:133563]
+    Hexa_iter=0
+    Hexa=[]
+    for j in Hexa_line:
+        if (j.find('CHEXA')==0):
+            #Hexa.append(int(j[20:25]))
+            Hexa.append(int(j[27:33])-1)
+            Hexa.append(int(j[35:41])-1)
+            Hexa.append(int(j[43:49])-1)
+            Hexa.append(int(j[51:57])-1)
+            Hexa.append(int(j[59:65])-1)
+            Hexa.append(int(j[67:73])-1)
+            Hexa_iter=Hexa_iter+1
+        elif (j.find('+')==0):
+            Hexa.append(int(j[11:17])-1)
+            Hexa.append(int(j[19:25])-1)
+    Hexa=np.array(Hexa)
+    Voxel=np.reshape(Hexa,(Hexa_iter,8))
+    cell=[]
+    for k in range(0,Hexa_iter):
+        cell_data=np.append(8,Voxel[k])
+        cell.append(cell_data)
+    cells=np.array([cell])
+    # # print(cells[0])
+    # # print(np.shape(points))
+    celltypes=np.full(Hexa_iter,CellType.HEXAHEDRON,dtype=np.float32)
+    return cells,celltypes,points
 st.set_page_config(page_title="Vehicle Upright Health Monitor",layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
 image=Image.open('Logo.png')
@@ -40,48 +84,6 @@ with Col1:
     st.subheader("Acceleration:"+str(acceleration[number]))
     st.subheader('Steering:'+str(steering[number]))
     predictor_button=st.button("Predict Stress Distribution")
-fem_file=open('E13_FEMModel.fem','r')
-content=fem_file.read()
-splitted_line=content.splitlines()
-Grid=[]
-iter=0
-for i in splitted_line:
-    if i.find('GRID')==0:
-        iter=iter+1
-        Grid.append(float(i[24:32]))
-        Grid.append(float(i[32:40]))
-        Grid.append(float(i[40:48]))
-    else:
-        continue
-Grid=np.array(Grid)
-points=np.reshape(Grid,(iter,3))
-Hexa_line=splitted_line[0:133563]
-Hexa_iter=0
-Hexa=[]
-for j in Hexa_line:
-    if (j.find('CHEXA')==0):
-        #Hexa.append(int(j[20:25]))
-        Hexa.append(int(j[27:33])-1)
-        Hexa.append(int(j[35:41])-1)
-        Hexa.append(int(j[43:49])-1)
-        Hexa.append(int(j[51:57])-1)
-        Hexa.append(int(j[59:65])-1)
-        Hexa.append(int(j[67:73])-1)
-        Hexa_iter=Hexa_iter+1
-    elif (j.find('+')==0):
-        Hexa.append(int(j[11:17])-1)
-        Hexa.append(int(j[19:25])-1)
-Hexa=np.array(Hexa)
-Voxel=np.reshape(Hexa,(Hexa_iter,8))
-cell=[]
-for k in range(0,Hexa_iter):
-    cell_data=np.append(8,Voxel[k])
-    cell.append(cell_data)
-cells=np.array([cell])
-# # print(cells[0])
-# # print(np.shape(points))
-celltypes=np.full(Hexa_iter,CellType.HEXAHEDRON,dtype=np.float32)
-grid=pv.UnstructuredGrid(cells,celltypes,points)
 # # # #grid=pv.StructuredGrid(points)
 if acceleration[number] < 0 and steering[number] == 0:
     case="Case_1"
@@ -100,6 +102,8 @@ with Col2:
         with col1:
             accel=abs(acceleration[number])
             result=predict([accel],case)
+            cells,celltypes,points=model_upload()
+            grid=pv.UnstructuredGrid(cells,celltypes,points)
             grid.cell_data["values"] = result
             pv.start_xvfb()
             plotter=pv.Plotter(window_size=[700,500])
