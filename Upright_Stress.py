@@ -12,7 +12,7 @@ from PIL import Image
 from life_predictor import life
 st.set_page_config(page_title="Vehicle Upright Health Monitor",layout="wide")
 st.set_option('deprecation.showPyplotGlobalUse', False)
-image=Image.open('C:/Users/Mukund/Documents/Digital_Twin/Voxel/Logo.png')
+image=Image.open('Logo.png')
 image.resize([700,87])
 H_col1,H_col2,H_col3=st.columns(3)
 with H_col1:
@@ -45,7 +45,7 @@ with Col1:
     st.subheader("Acceleration:"+str(acceleration[number]))
     st.subheader('Steering:'+str(steering[number]))
     predictor_button=st.button("Predict Stress Distribution")
-fem_file=open('C:/Users/Mukund/Documents/Digital_Twin/Voxel/E13_FEMModel.fem','r')
+fem_file=open('E13_FEMModel.fem','r')
 content=fem_file.read()
 splitted_line=content.splitlines()
 Grid=[]
