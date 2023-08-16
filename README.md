@@ -13,11 +13,15 @@ To perform a demo of this app you can scan the following QR code.
 ## Steps to run the app:
 * Fork the Repo.
 * Perform a pip install of all the required libraries mentioned in requirements.txt
-* Use the Acceleration_steering.py to create the numpy arrays
+* Use the Acceleration_steering.py to create the numpy arrays for the input.
+* Run the app by typing in the following code.
+```
+ python -m run streamlit Upright_Stress.py
+```
 git remote add origin https://git.fs-stuttgart.de/mukund.thirugnanasambanthar/digital_twin_streamlit.git
 git branch -M main
 git push -uf origin main
-```
+
 
 ## Integrate with your tools
 
