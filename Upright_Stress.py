@@ -108,6 +108,7 @@ with Col2:
             st.write(case)
             result=predict([accel],case)
             grid.cell_data["values"] = result
+            pv.start_xvfb()
             plotter=pv.Plotter(window_size=[700,500])
             plotter.view_isometric()
             plotter.add_axes(line_width=5)
