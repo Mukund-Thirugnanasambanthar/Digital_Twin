@@ -31,11 +31,6 @@ with Col1:
     time=st.number_input('Time Frame to compute')
     time=int(time)
     x=np.arange(0,time,1)
-    # st.write(len(acceleration),np.shape(x))
-    # figure,(ax_1,ax_2)=plt.subplots(2,1,figsize=(20,4))
-    # ax_1.plot(x,acceleration)
-    # ax_2.plot(x,steering)
-    # st.pyplot(figure)
     number=st.slider('Index',min_value=0, max_value=time, value=None, step=1)
     chart_data=pd.DataFrame({'x':x,'Acceleration':acceleration[0:time],'Steering':steering[0:time]})
     chart_accel=(alt.Chart(chart_data).mark_trail(point=True).encode(x='x',y='Acceleration',color=alt.condition(alt.datum.x==number,alt.value('orange'),alt.value('steelblue')))).properties(width=1800, height=150)
@@ -78,7 +73,6 @@ for j in Hexa_line:
         Hexa.append(int(j[19:25])-1)
 Hexa=np.array(Hexa)
 Voxel=np.reshape(Hexa,(Hexa_iter,8))
-# grid = pv.UnstructuredGrid(Voxel_,[CellType.HEXAHEDRON], data)
 cell=[]
 for k in range(0,Hexa_iter):
     cell_data=np.append(8,Voxel[k])
@@ -105,7 +99,6 @@ with Col2:
         col1,col2=st.columns([5,1])
         with col1:
             accel=abs(acceleration[number])
-            st.write(case)
             result=predict([accel],case)
             grid.cell_data["values"] = result
             pv.start_xvfb()
@@ -134,6 +127,7 @@ with Col2:
             ax.axis('off')
             legend=fig.savefig('Colorbar.png')
             st.pyplot(fig)
+            st.caption('Stress Distribution (MPa) at'+str(number))
     acceleration_life=acceleration[0:time]
     steering_life=steering[0:time]
     max_stress=[]
@@ -150,9 +144,7 @@ with Col2:
         elif steering_life[i] != 0:
             case_life="Case_3"
         cases.append(case_life)
-    st.write(acceleration_life[18],cases)
-    max_stress=life(acceleration_life,cases)
-    
+    max_stress=life(acceleration_life,cases)    
     stresslevels_rice_Endurance_ksi = [element * 0.145 for element in max_stress]
     # Given Constants
     
