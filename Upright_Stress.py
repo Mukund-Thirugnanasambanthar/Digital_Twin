@@ -173,6 +173,7 @@ with H_col3:
     if upload_steering_file is not None:
         steering=np.load(upload_steering_file)
         computation()
+    
     if st.button("Clear All"):
     # Clear values from *all* all in-memory and on-disk data caches:
     # i.e. clear values from both square and cube
